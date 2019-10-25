@@ -1,0 +1,6 @@
+__pycache__
+env
+htmlcov
+.vscode
+.DS_Store
+migrations
