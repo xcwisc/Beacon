@@ -1,7 +1,6 @@
 import * as firebase from 'firebase/app';
 import { Request, Response } from 'express';
 import 'firebase/auth';
-import Location from '../models/Locations';
 import User from '../models/User';
 
 export const register = (req: Request, res: Response) => {

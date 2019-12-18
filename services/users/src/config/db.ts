@@ -7,6 +7,9 @@ const db = new Sequelize(
   {
     host: 'localhost',
     dialect: 'mysql',
+    define: {
+      timestamps: false
+    },
     pool: {
       max: 5,
       min: 0,

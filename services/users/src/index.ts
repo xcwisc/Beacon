@@ -2,21 +2,13 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as logger from 'morgan';
 import * as dotenv from 'dotenv';
+dotenv.config();
 
 import authRoute from './routes/auth';
 import locationRoute from './routes/location';
 
 // configs
-dotenv.config();
-require('./config/firebase');
-
-// db.authenticate()
-//   .then(() => {
-//     console.log('Connection has been established successfully.');
-//   })
-//   .catch(err => {
-//     console.error('Unable to connect to the database:', err);
-//   });
+import './config/firebase';
 
 const app = express();
 app.use(logger('dev'));
