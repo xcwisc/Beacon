@@ -1,11 +1,14 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const logger = require('morgan');
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as logger from 'morgan';
+import * as dotenv from 'dotenv';
+
+import authRoute from './routes/auth';
+import locationRoute from './routes/location';
 
 // configs
-const dotenv = require('dotenv');
 dotenv.config();
-require("./config/firebase");
+require('./config/firebase');
 
 // db.authenticate()
 //   .then(() => {
@@ -16,13 +19,13 @@ require("./config/firebase");
 //   });
 
 const app = express();
-
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // routes
-app.use('/auth', require('./routes/auth'));
+app.use('/auth', authRoute);
+app.use('/location', locationRoute);
 
 app.listen(process.env.PORT, () => {
   console.log('App is running at http://localhost:%d', process.env.PORT);

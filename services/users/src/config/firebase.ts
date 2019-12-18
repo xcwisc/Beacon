@@ -1,4 +1,4 @@
-const firebase = require('firebase/app');
+import * as firebase from 'firebase/app';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -11,4 +11,5 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID
 };
 // Initialize Firebase
+
 firebase.initializeApp(firebaseConfig);

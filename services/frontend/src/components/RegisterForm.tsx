@@ -10,7 +10,11 @@ type FormState = {
   password: string,
   passwordRepeat: string,
   username: string,
-  [key: string]: string
+  countries: Array<string>,
+  states: Array<string>,
+  cities: Array<string>,
+  locationId: string,
+  [key: string]: any
 }
 class RegisterForm extends Component<FormProps, FormState> {
   constructor(props: FormProps) {
@@ -19,7 +23,11 @@ class RegisterForm extends Component<FormProps, FormState> {
       email: '',
       password: '',
       username: '',
-      passwordRepeat: ''
+      passwordRepeat: '',
+      countries: ["a", "b"],
+      states: [],
+      cities: [],
+      locationId: ''
     }
     this.handleFormChange = this.handleFormChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -43,9 +51,11 @@ class RegisterForm extends Component<FormProps, FormState> {
     return (
       <div className="container">
         <div className="columns">
-          <div className="column">
+          <div className="column is-3" />
+          <div className="column is-6">
+            <br />
             <h1 className='title'>Register</h1>
-            <hr /> <br />
+            <hr />
             <form onSubmit={(event) => this.handleFormSubmit(event)}>
               <div className="field">
                 <label className="label">DisplayName</label>
@@ -136,8 +146,26 @@ class RegisterForm extends Component<FormProps, FormState> {
                 <div className="control">
                   <div className="select">
                     <select>
-                      <option>Select dropdown</option>
-                      <option>With options</option>
+                      <option disabled selected > -- select a country -- </option>
+                      {this.state.countries.map((country: string) => {
+                        return <option>{country}</option>
+                      })}
+                    </select>
+                  </div>
+                  <div className="select">
+                    <select>
+                      <option disabled selected > -- select a state -- </option>
+                      {this.state.states.map((state: string) => {
+                        return <option>{state}</option>
+                      })}
+                    </select>
+                  </div>
+                  <div className="select">
+                    <select>
+                      <option disabled selected > -- select a city -- </option>
+                      {this.state.cities.map((city: string) => {
+                        return <option>{city}</option>
+                      })}
                     </select>
                   </div>
                 </div>
@@ -159,6 +187,7 @@ class RegisterForm extends Component<FormProps, FormState> {
               />
             </form>
           </div >
+          <div className="column is-3" />
         </div >
       </div >
     )

@@ -1,6 +1,6 @@
-const Sequelize = require('sequelize');
+import { Sequelize } from 'sequelize';
 
-module.exports = new Sequelize(
+const db = new Sequelize(
   process.env.MYSQL_DBNAME,
   process.env.MYSQL_USERNAME,
   process.env.MYSQL_ROOT_PASSWORD,
@@ -15,3 +15,5 @@ module.exports = new Sequelize(
     }
   }
 );
+
+export default db;
