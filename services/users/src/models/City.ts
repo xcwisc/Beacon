@@ -1,6 +1,5 @@
 import db from '../config/db';
 import { Model, DataTypes } from 'sequelize';
-import User from './User';
 
 class City extends Model {
   public city_id!: number;
@@ -22,6 +21,5 @@ City.init({
   tableName: 'cities',
 });
 
-City.hasMany(User), { foreignKey: 'city_id' };
 
 export default City;
