@@ -5,7 +5,7 @@ const db = new Sequelize(
   process.env.MYSQL_USERNAME,
   process.env.MYSQL_ROOT_PASSWORD,
   {
-    host: 'localhost',
+    host: process.env.DB_HOST,
     dialect: 'mysql',
     define: {
       timestamps: false

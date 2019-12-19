@@ -15,11 +15,9 @@ CREATE TABLE states (
 CREATE TABLE cities (
   city_id int NOT NULL AUTO_INCREMENT,
   state_id int NOT NULL,
-  country_id int NOT NULL,
   city_name VARCHAR(30) NOT NULL,
   PRIMARY KEY(city_id),
-  FOREIGN KEY (state_id) REFERENCES states(state_id),
-  FOREIGN KEY (country_id) REFERENCES countries(country_id)
+  FOREIGN KEY (state_id) REFERENCES states(state_id)
 );
 
 CREATE TABLE users (
@@ -52,11 +50,11 @@ VALUES
   (2, 'Wisconsin');
 
 INSERT INTO cities
-  (state_id, country_id, city_name)
+  (state_id, city_name)
 VALUES
-  (2, 2, 'Madison');
+  (2, 'Madison');
 
 INSERT INTO cities
-  (state_id, country_id, city_name)
+  (state_id, city_name)
 VALUES
-  (2, 2, 'Milwaukee');
+  (2, 'Milwaukee');

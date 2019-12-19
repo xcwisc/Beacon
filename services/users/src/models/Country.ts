@@ -1,7 +1,6 @@
 import db from '../config/db';
 import { Model, DataTypes } from 'sequelize';
 import States from './State';
-import City from './City';
 
 class Country extends Model {
   public country_id!: number;
@@ -23,7 +22,6 @@ Country.init({
   tableName: 'countries',
 });
 
-Country.hasMany(States);
-Country.hasMany(City);
+Country.hasMany(States, { foreignKey: 'country_id' });
 
 export default Country;

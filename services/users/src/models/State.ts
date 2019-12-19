@@ -22,6 +22,6 @@ States.init({
   tableName: 'states',
 });
 
-States.hasMany(City);
+States.hasMany(City, { foreignKey: 'state_id' });
 
 export default States;

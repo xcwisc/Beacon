@@ -19,9 +19,9 @@ City.init({
   }
 }, {
   sequelize: db,
-  tableName: 'states',
+  tableName: 'cities',
 });
 
-City.hasMany(User);
+City.hasMany(User), { foreignKey: 'city_id' };
 
 export default City;
