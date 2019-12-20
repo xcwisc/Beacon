@@ -77,7 +77,7 @@ export const register = async (req: Request, res: Response) => {
       resObj["message"] = errorMessage;
     }
 
-    res.status(500).json(resObj);
+    res.status(400).json(resObj);
     return;
   }
 
