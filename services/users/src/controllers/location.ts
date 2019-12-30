@@ -11,8 +11,8 @@ export const getAllCountries = (req: Request, res: Response) => {
   Country.findAll()
     .then(countries => {
       const data = countries.map((country) => ({
-        country_name: country.country_name,
-        country_id: country.country_id
+        name: country.country_name,
+        id: country.country_id
       }));
       resObj['data'] = data;
       resObj['status'] = 'success';
@@ -43,8 +43,8 @@ export const getStatesByCountryId = (req: Request, res: Response) => {
     }
   }).then(states => {
     const data = states.map((state) => ({
-      state_name: state.state_name,
-      state_id: state.state_id
+      name: state.state_name,
+      id: state.state_id
     }));
     resObj['data'] = data;
     resObj['status'] = 'success';
@@ -74,8 +74,8 @@ export const getCitiesByStateId = (req: Request, res: Response) => {
     }
   }).then(cities => {
     const data = cities.map((city) => ({
-      city_name: city.city_name,
-      city_id: city.city_id
+      name: city.city_name,
+      id: city.city_id
     }));
     resObj['data'] = data;
     resObj['status'] = 'success';
