@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import Project from '../models/Project';
 import User from '../models/User';
 import Like from '../models/Like';
+import { CustomeRequest } from '../middlewares/auth';
 
-export const getProjectByUser = (req: Request, res: Response) => {
+export const getProjectByUser = (req: CustomeRequest, res: Response) => {
   const resObj = {
     'status': 'fail'
   }
-  // TODO: replace with token later
-  const u_id: string = req.query.u_id;
+  const u_id: string = req.authId;
   Project.findAll({
     where: {
       u_id: u_id
@@ -33,13 +33,12 @@ export const getProjectByUser = (req: Request, res: Response) => {
     });
 }
 
-export const like = async (req: Request, res: Response) => {
+export const like = async (req: CustomeRequest, res: Response) => {
   const resObj = {
     'status': 'fail'
   }
 
-  // TODO: replace with token later
-  const u_id: string = req.body.u_id;
+  const u_id: string = req.authId;
   const p_id: number = Number(req.body.p_id);
 
   // check both u_id and p_id is present
@@ -112,6 +111,6 @@ export const like = async (req: Request, res: Response) => {
 
 }
 
-export const unlike = (req: Request, res: Response) => {
+export const unlike = (req: CustomeRequest, res: Response) => {
 
 }

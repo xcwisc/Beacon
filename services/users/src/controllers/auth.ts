@@ -1,44 +1,44 @@
-import * as firebase from 'firebase/app';
 import * as EmailValidator from 'email-validator';
 import { Request, Response } from 'express';
-import 'firebase/auth';
+import admin from '../config/firebase';
 import City from '../models/City';
 import User from '../models/User';
 
 export const register = async (req: Request, res: Response) => {
   const resObj = { "status": "fail" };
-  const body = req.body;
+  const { email, password, displayname } = req.body;
+  let { city_id } = req.body;
 
   // check if parameters exist
-  if (!body.email || !body.password || !body.city_id || !body.displayname) {
+  if (!email || !password || !city_id || !displayname) {
     resObj["message"] = "missing parameters";
     res.status(400).json(resObj);
     return;
   }
 
   // check if email is valid
-  if (!EmailValidator.validate(body.email)) {
+  if (!EmailValidator.validate(email)) {
     resObj["message"] = "invalid email";
     res.status(400).json(resObj);
     return;
   }
 
   // check if password is valid (could use password-validator in future)
-  if (body.password.length < 8) {
+  if (password.length < 8) {
     resObj["message"] = "invalid password";
     res.status(400).json(resObj);
     return;
   }
 
   // check if displayname is valid
-  if (body.displayname.length > 50) {
+  if (displayname.length > 50) {
     resObj["message"] = "invalid displayname";
     res.status(400).json(resObj);
     return;
   }
 
   // check if city_id is valid
-  const city_id: number = Number(body.city_id);
+  city_id = Number(city_id);
   if (isNaN(city_id)) {
     resObj['message'] = 'invalid city_id';
     res.status(400).json(resObj);
@@ -63,10 +63,13 @@ export const register = async (req: Request, res: Response) => {
   }
 
   // insert email and password into firebase auth
-  let firebaseUser: firebase.auth.UserCredential;
+  let firebaseUser: admin.auth.UserRecord;
   try {
-    console.log(body);
-    firebaseUser = await firebase.auth().createUserWithEmailAndPassword(body.email, body.password);
+    firebaseUser = await admin.auth().createUser({
+      email,
+      password,
+      displayName: displayname,
+    });
   } catch (err) {
     const errorCode = err.code;
     const errorMessage = err.message;
@@ -86,17 +89,17 @@ export const register = async (req: Request, res: Response) => {
 
   // then insert the UID genertated by firebase, displayname, city_id into users table
   User.create({
-    id: firebaseUser.user.uid,
-    displayname: body.displayname,
+    id: firebaseUser.uid,
+    displayname: displayname,
     city_id: city_id,
   }).then(async user => {
     resObj["status"] = "success";
-    const token = await firebaseUser.user.getIdToken();
+    const token = await admin.auth().createCustomToken(firebaseUser.uid);
     resObj["data"] = { "token": token };
     res.status(201).json(resObj);
     return;
   }).catch(err => {
-    firebaseUser.user.delete();
+    admin.auth().deleteUser(firebaseUser.uid);
     console.log(err);
     resObj["message"] = "create user fail";
     res.status(500).json(resObj);
