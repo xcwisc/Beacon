@@ -18,12 +18,9 @@ User.init({
     allowNull: false
   },
   city_id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     references: {
-      // This is a reference to another model
       model: City,
-
-      // This is the column name of the referenced model
       key: 'city_id',
     }
   }
@@ -31,5 +28,7 @@ User.init({
   sequelize: db,
   tableName: 'users',
 });
+
+User.sync();
 
 export default User;

@@ -60,20 +60,20 @@ class RegisterForm extends Component<FormProps, FormState> {
     event.preventDefault();
     // TODO: valdicate every field in the form before submit
 
-    // const registerUrl = `${process.env.REACT_APP_USERS_URL}/auth/register`
-    // const data = {
-    //   displayname: this.state.username,
-    //   email: this.state.email,
-    //   password: this.state.password,
-    //   city_id: this.state.city_value
-    // }
-    // axios.post(registerUrl, data)
-    //   .then(res => {
-    //     console.log(res);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
+    const registerUrl = `${process.env.REACT_APP_USERS_URL}/auth/register`
+    const data = {
+      displayname: this.state.username,
+      email: this.state.email,
+      password: this.state.password,
+      city_id: this.state.city_value
+    }
+    axios.post(registerUrl, data)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   handleFormChange(event: ChangeEvent<HTMLInputElement>): void {

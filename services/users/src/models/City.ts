@@ -8,7 +8,7 @@ class City extends Model {
 
 City.init({
   city_id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
@@ -21,5 +21,6 @@ City.init({
   tableName: 'cities',
 });
 
+City.sync();
 
 export default City;

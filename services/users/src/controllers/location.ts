@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express';
 import Country from '../models/Country';
 import States from '../models/State';

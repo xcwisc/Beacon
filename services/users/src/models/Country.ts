@@ -9,7 +9,7 @@ class Country extends Model {
 
 Country.init({
   country_id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
@@ -23,5 +23,6 @@ Country.init({
 });
 
 Country.hasMany(States, { foreignKey: 'country_id' });
+Country.sync();
 
 export default Country;

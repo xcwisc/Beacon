@@ -7,6 +7,7 @@ dotenv.config();
 
 import authRoute from './routes/auth';
 import locationRoute from './routes/location';
+import postRoute from './routes/post';
 
 // configs
 import './config/firebase';
@@ -20,6 +21,7 @@ app.use(cors());
 // routes
 app.use('/auth', authRoute);
 app.use('/location', locationRoute);
+app.use('/post', postRoute);
 
 app.listen(process.env.PORT, () => {
   console.log('App is running at http://localhost:%d', process.env.PORT);

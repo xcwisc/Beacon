@@ -65,6 +65,7 @@ export const register = async (req: Request, res: Response) => {
   // insert email and password into firebase auth
   let firebaseUser: firebase.auth.UserCredential;
   try {
+    console.log(body);
     firebaseUser = await firebase.auth().createUserWithEmailAndPassword(body.email, body.password);
   } catch (err) {
     const errorCode = err.code;
@@ -80,6 +81,7 @@ export const register = async (req: Request, res: Response) => {
     res.status(400).json(resObj);
     return;
   }
+  console.log("exit firebase");
 
 
   // then insert the UID genertated by firebase, displayname, city_id into users table
