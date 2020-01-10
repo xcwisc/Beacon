@@ -1,75 +1,54 @@
-import * as EmailValidator from 'email-validator';
+import { validationResult, body } from 'express-validator';
 import { Request, Response } from 'express';
 import admin from '../config/firebase';
 import City from '../models/City';
 import User from '../models/User';
 
-export const register = async (req: Request, res: Response) => {
-  const resObj = { "status": "fail" };
-  const { email, password, displayname } = req.body;
-  let { city_id } = req.body;
-
-  // check if parameters exist
-  if (!email || !password || !city_id || !displayname) {
-    resObj["message"] = "missing parameters";
-    res.status(400).json(resObj);
-    return;
-  }
-
-  // check if email is valid
-  if (!EmailValidator.validate(email)) {
-    resObj["message"] = "invalid email";
-    res.status(400).json(resObj);
-    return;
-  }
-
-  // check if password is valid (could use password-validator in future)
-  if (password.length < 8) {
-    resObj["message"] = "invalid password";
-    res.status(400).json(resObj);
-    return;
-  }
-
-  // check if displayname is valid
-  if (displayname.length > 50) {
-    resObj["message"] = "invalid displayname";
-    res.status(400).json(resObj);
-    return;
-  }
-
-  // check if city_id is valid
-  city_id = Number(city_id);
-  if (isNaN(city_id)) {
-    resObj['message'] = 'invalid city_id';
-    res.status(400).json(resObj);
-    return;
-  }
-  let city: City[];
-  try {
-    city = await City.findAll({
-      where: {
-        city_id: city_id
+export const registerValidators = [
+  body('email').isEmail().withMessage('invalid email'),
+  body('password').isLength({ min: 8, max: 15 }).withMessage('invalid password'),
+  body('displayname').isLength({ min: 1, max: 50 }).withMessage('invalid displayname'),
+  body('city_id').isInt().withMessage('invalid city_id')
+    .toInt()
+    .custom(async (value: number) => {
+      if (isNaN(value)) {
+        return;
+      }
+      try {
+        let city: City[] = await City.findAll({
+          where: {
+            city_id: value
+          }
+        })
+        if (city.length < 1) {
+          return Promise.reject('invalid city_id');
+        }
+      } catch (err) {
+        console.log(err);
+        return Promise.reject('invalid city_id');
       }
     })
-    if (city.length < 1) {
-      resObj["message"] = "invalid city_id";
-      res.status(400).json(resObj);
-      return;
-    }
-  } catch (err) {
-    resObj["message"] = "invalid city_id";
-    res.status(400).json(resObj);
-    return;
+]
+export const register = async (req: Request, res: Response) => {
+  const resObj = { "status": "fail" };
+  const { email, password, displayname, city_id } = req.body;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    resObj['message'] = errors.array();
+    return res.status(400).json(resObj);
   }
 
   // insert email and password into firebase auth
   let firebaseUser: admin.auth.UserRecord;
   try {
+    console.log("start");
     firebaseUser = await admin.auth().createUser({
       email,
       password,
       displayName: displayname,
     });
+    console.log("end");
   } catch (err) {
     const errorCode = err.code;
     const errorMessage = err.message;

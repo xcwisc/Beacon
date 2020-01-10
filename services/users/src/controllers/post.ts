@@ -3,6 +3,7 @@ import Project from '../models/Project';
 import User from '../models/User';
 import Like from '../models/Like';
 import { CustomeRequest } from '../middlewares/auth';
+import { body, validationResult } from 'express-validator';
 
 export const getProjectByUser = (req: CustomeRequest, res: Response) => {
   const resObj = {
@@ -33,65 +34,66 @@ export const getProjectByUser = (req: CustomeRequest, res: Response) => {
     });
 }
 
+export const likeValidators = [
+  body('u_id')
+    .notEmpty().withMessage('invalid token')
+    .custom(async (value: string) => {
+      if (value.length < 1) {
+        return;
+      }
+      // check the validity of u_id in the database
+      try {
+        const users = await User.findAll({
+          where: {
+            u_id: value
+          }
+        });
+        if (users.length < 1) {
+          return Promise.reject('invalid token');
+        }
+      }
+      catch (err) {
+        console.log(err);
+        return Promise.reject('invalid token');
+      }
+    }),
+  body('p_id')
+    .isInt().withMessage('invalid p_id')
+    .toInt()
+    .custom(async (value: number) => {
+      if (isNaN(value)) {
+        return;
+      }
+      // check the validity of p_id in the database
+      try {
+        const projects = await Project.findAll({
+          where: {
+            p_id: value
+          }
+        });
+        if (projects.length < 1) {
+          return Promise.reject('invalid p_id');
+        }
+      } catch (err) {
+        console.log(err);
+        return Promise.reject('invalid p_id');
+      }
+    })
+]
+
 export const like = async (req: CustomeRequest, res: Response) => {
   const resObj = {
     'status': 'fail'
   }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    resObj['message'] = errors.array();
+    return res.status(400).json(resObj);
+  }
 
   const u_id: string = req.authId;
-  const p_id: number = Number(req.body.p_id);
+  const p_id: number = req.body.p_id;
 
-  // check both u_id and p_id is present
-  if (!u_id || !p_id) {
-    resObj['message'] = 'missing parameters';
-    res.status(400).json(resObj);
-    return;
-  }
-
-  if (isNaN(p_id)) {
-    resObj['message'] = 'invalid p_id';
-    res.status(400).json(resObj);
-    return;
-  }
-
-  // check the validity of u_id and p_id
-  try {
-    const projects = await Project.findAll({
-      where: {
-        p_id: p_id
-      }
-    });
-    if (projects.length < 1) {
-      resObj['message'] = 'invalid p_id';
-      res.status(400).json(resObj);
-      return;
-    }
-  } catch (err) {
-    console.log(err);
-    resObj['message'] = 'invalid p_id';
-    res.status(400).json(resObj);
-    return;
-  }
-
-  try {
-    const users = await User.findAll({
-      where: {
-        u_id: u_id
-      }
-    });
-    if (users.length < 1) {
-      resObj['message'] = 'invalid u_id';
-      res.status(400).json(resObj);
-      return;
-    }
-  } catch (err) {
-    console.log(err);
-    resObj['message'] = 'invalid u_id';
-    res.status(400).json(resObj);
-    return;
-  }
-
-  // at this point the inport is valid
   // insert p_id and u_id into likes
   Like.create({
     u_id: u_id,
@@ -107,8 +109,6 @@ export const like = async (req: CustomeRequest, res: Response) => {
     res.status(500).json(resObj);
     return;
   })
-
-
 }
 
 export const unlike = (req: CustomeRequest, res: Response) => {
