@@ -1,11 +1,11 @@
 package com.beacon.backend.system.exception;
 
-public class UserNameAlreadyExistException extends RuntimeException {
-  public UserNameAlreadyExistException() {
-  }
+import java.util.Map;
 
-  public UserNameAlreadyExistException(String message) {
-    super(message);
+public class UserNameAlreadyExistException extends BaseException {
+
+  public UserNameAlreadyExistException(Map<String, Object> data) {
+    super(ErrorCode.RESOURCE_NOT_FOUND, data);
   }
 }
 
