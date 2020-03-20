@@ -8,6 +8,7 @@ import { signInAction, signOutAction } from "./store/user/actions";
 import { UserState } from "./store/user/types";
 import { Switch, Route } from "react-router-dom";
 import RegisterForm from "./components/auth/RegisterForm";
+import LoginForm from "./components/auth/LoginForm";
 import Index from "./components/layouts/Index";
 
 interface AppProps {
@@ -36,6 +37,11 @@ const App: React.FC<AppProps> = props => {
           exact
           path="/register"
           render={() => <RegisterForm isSignedIn={props.user.isSignedIn} />}
+        ></Route>
+        <Route
+          exact
+          path="/login"
+          render={() => <LoginForm isSignedIn={props.user.isSignedIn} />}
         ></Route>
         <Route exact path="/users" component={Index} />
       </Switch>

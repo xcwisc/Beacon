@@ -1,6 +1,6 @@
-import React, { Component, FormEvent, ChangeEvent, OptionHTMLAttributes, SelectHTMLAttributes } from 'react';
-import axios from "axios";
+import React, { Component, FormEvent, ChangeEvent } from 'react';
 import { Redirect } from 'react-router-dom';
+import axios from "axios";
 
 type FormProps = {
   isSignedIn: Boolean

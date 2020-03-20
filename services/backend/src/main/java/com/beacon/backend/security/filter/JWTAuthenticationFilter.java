@@ -59,7 +59,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.toList());
     String token = JwtTokenUtils.createToken(jwtUser.getUsername(), roles, rememberMe.get());
-    // Http Response Header 中返回 Token
     response.setHeader(SecurityConstants.TOKEN_HEADER, token);
   }
 
