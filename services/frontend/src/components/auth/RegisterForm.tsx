@@ -47,10 +47,11 @@ class RegisterForm extends Component<FormProps, FormState> {
   componentDidMount(): void {
     // get all tha available countries in our database
     // insert them in the country select
-    const cityUrl: string = `${process.env.REACT_APP_USERS_URL}/location/countries`;
+    const cityUrl: string = `${process.env.REACT_APP_USERS_URL}/api/location/countries`;
     axios.get(cityUrl)
       .then(res => {
-        this.setState({ countries: res.data.data });
+        console.log(res.data);
+        this.setState({ countries: res.data.data.countries });
       }).catch(err => {
         console.log(err);
       });
@@ -62,7 +63,7 @@ class RegisterForm extends Component<FormProps, FormState> {
 
     const registerUrl = `${process.env.REACT_APP_USERS_URL}/auth/register`
     const data = {
-      displayname: this.state.username,
+      username: this.state.username,
       email: this.state.email,
       password: this.state.password,
       city_id: this.state.city_value
@@ -96,10 +97,10 @@ class RegisterForm extends Component<FormProps, FormState> {
     });
 
     // get all the states by the selected country id
-    let stateUrl = `${process.env.REACT_APP_USERS_URL}/location/states/?country_id=${country_value}`;
+    let stateUrl = `${process.env.REACT_APP_USERS_URL}/api/location/states/?countryId=${country_value}`;
     axios.get(stateUrl)
       .then(res => {
-        this.setState({ states: res.data.data });
+        this.setState({ states: res.data.data.states });
       })
       .catch(err => {
         console.log(err);
@@ -115,10 +116,10 @@ class RegisterForm extends Component<FormProps, FormState> {
     this.setState({ cities: [], city_value: '-- select a city --' });
 
     // get all the cities by the selected state id
-    let cityUrl = `${process.env.REACT_APP_USERS_URL}/location/cities/?state_id=${state_value}`;
+    let cityUrl = `${process.env.REACT_APP_USERS_URL}/api/location/cities/?stateId=${state_value}`;
     axios.get(cityUrl)
       .then(res => {
-        this.setState({ cities: res.data.data });
+        this.setState({ cities: res.data.data.cities });
       })
       .catch(err => {
         console.log(err);
@@ -144,13 +145,13 @@ class RegisterForm extends Component<FormProps, FormState> {
             <hr />
             <form onSubmit={(event) => this.handleFormSubmit(event)}>
               <div className="field">
-                <label className="label">DisplayName</label>
+                <label className="label">UserName</label>
                 <div className="control has-icons-left has-icons-right">
                   <input
                     name="username"
                     className="input"
                     type="text"
-                    placeholder="Enter DisplayName"
+                    placeholder="Enter UserName"
                     required
                     value={this.state.username}
                     onChange={this.handleFormChange}
