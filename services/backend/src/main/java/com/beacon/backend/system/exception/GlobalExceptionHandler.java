@@ -1,6 +1,5 @@
 package com.beacon.backend.system.exception;
 
-import com.beacon.backend.system.controller.LocationController;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -13,13 +12,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@ControllerAdvice(assignableTypes = {LocationController.class})
+@ControllerAdvice(annotations = RestController.class)
 @ResponseBody
 public class GlobalExceptionHandler {
 
   /**
    * general app exception handling
+   *
    * @param ex
    * @param request
    * @return
@@ -32,6 +33,7 @@ public class GlobalExceptionHandler {
 
   /**
    * request body validation failure
+   *
    * @param ex
    * @param request
    * @return
@@ -52,6 +54,7 @@ public class GlobalExceptionHandler {
 
   /**
    * request param validation failure
+   *
    * @param e
    * @param request
    * @return

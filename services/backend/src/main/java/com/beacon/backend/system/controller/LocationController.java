@@ -35,7 +35,8 @@ public class LocationController {
   }
 
   @GetMapping("/states")
-  public ResponseEntity<?> getAllStatesByCountry(@Valid @RequestParam("countryId") Integer countryId) {
+  public ResponseEntity<?> getAllStatesByCountry(
+      @Valid @RequestParam("countryId") Integer countryId) {
     Map<String, Object> data = new HashMap<>();
     data.put("states", locationService.getAllStatesByCountry(countryId));
     BeaconResponse beaconResponse = new BeaconResponse(data);

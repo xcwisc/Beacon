@@ -1,7 +1,9 @@
 package com.beacon.backend.security.controller;
 
+import com.beacon.backend.security.entity.RegisterUser;
+import com.beacon.backend.system.entity.User;
 import com.beacon.backend.system.service.UserService;
-import java.util.Map;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +18,7 @@ public class AuthController {
   private UserService userService;
 
   @PostMapping("/register")
-  public ResponseEntity registerUser(@RequestBody Map<String, String> registerUser) {
+  public ResponseEntity registerUser(@RequestBody @Valid RegisterUser registerUser) {
     userService.saveUser(registerUser);
     return ResponseEntity.ok().build();
   }

@@ -1,6 +1,12 @@
 import { UserState, UserActionTypes, SIGNIN, SIGNOUT } from './types';
 const initialState: UserState = {
-  isSignedIn: false
+  isSignedIn: false,
+  data: {
+    username: "",
+    city: "",
+    country: "",
+    state: ""
+  }
 }
 
 export const userReducer = (
@@ -10,14 +16,21 @@ export const userReducer = (
     case SIGNIN:
       state = {
         ...state,
-        isSignedIn: true
+        isSignedIn: true,
+        data: action.data
       }
       break;
 
     case SIGNOUT:
       state = {
         ...state,
-        isSignedIn: false
+        isSignedIn: false,
+        data: {
+          username: "",
+          city: "",
+          country: "",
+          state: ""
+        }
       }
       break;
   }

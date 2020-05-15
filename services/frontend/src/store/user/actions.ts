@@ -1,8 +1,10 @@
-import { SIGNIN, SIGNOUT, UserActionTypes } from "./types";
+import { SIGNIN, SIGNOUT, UserActionTypes, SignInData } from "./types";
 
-export const signInAction = (): UserActionTypes => {
+export const signInAction = (data: SignInData): UserActionTypes => {
+  console.log(data);
   return {
-    type: SIGNIN
+    type: SIGNIN,
+    data: data
   };
 }
 

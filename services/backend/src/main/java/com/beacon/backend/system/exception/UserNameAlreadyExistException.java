@@ -5,7 +5,7 @@ import java.util.Map;
 public class UserNameAlreadyExistException extends BaseException {
 
   public UserNameAlreadyExistException(Map<String, Object> data) {
-    super(ErrorCode.RESOURCE_NOT_FOUND, data);
+    super(ErrorCode.USERNAME_ALREADY_EXIST, data);
   }
 }
 

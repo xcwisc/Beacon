@@ -3,7 +3,8 @@ import { Redirect } from "react-router-dom";
 import axios from "axios";
 
 type FormProps = {
-  isSignedIn: Boolean
+  isSignedIn: Boolean,
+  signIn: Function
 }
 
 type FormState = {
@@ -27,7 +28,7 @@ class LoginForm extends Component<FormProps, FormState> {
     this.handleFormChange = this.handleFormChange.bind(this);
   }
 
-  handleFormSubmit(event: FormEvent<HTMLFormElement>): void {
+  async handleFormSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // TODO: valdicate every field in the form before submit
 
@@ -37,13 +38,20 @@ class LoginForm extends Component<FormProps, FormState> {
       password: this.state.password,
       rememberMe: this.state.rememberMe
     }
-    axios.post(registerUrl, data)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      let res = await axios.post(registerUrl, data);
+      if (res.status === 200) {
+        sessionStorage.setItem("jwtToken", res.headers.authorization);
+        this.props.signIn({
+          username: this.state.username,
+          city: "city",
+          country: "country",
+          state: "state"
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   handleFormChange(event: ChangeEvent<HTMLInputElement>): void {

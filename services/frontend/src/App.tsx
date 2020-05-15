@@ -1,11 +1,11 @@
 import * as React from "react";
 import Navbar from "./components/layouts/Navbar";
 
-import { AppState } from "./store";
+import { AppState } from "./store/index";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { signInAction, signOutAction } from "./store/user/actions";
-import { UserState } from "./store/user/types";
+import { UserState, SignInData } from "./store/user/types";
 import { Switch, Route } from "react-router-dom";
 import RegisterForm from "./components/auth/RegisterForm";
 import LoginForm from "./components/auth/LoginForm";
@@ -21,16 +21,19 @@ const App: React.FC<AppProps> = props => {
   return (
     <div className="App">
       <Navbar />
+      <div>
+        <p> {props.user.isSignedIn ? "yes" : "no"}</p>
+        <p> {props.user.data.city}</p>
+        <p> {props.user.data.country}</p>
+        <p> {props.user.data.state}</p>
+        <p> {props.user.data.username}</p>
+      </div>
       <Switch>
         <Route
           exact
           path="/"
           render={() => (
-            <div>
-              <p> {props.user.isSignedIn ? "yes" : "no"}</p>
-              <div onClick={e => props.signIn()}></div>
-              <div onClick={e => props.signOut()}></div>
-            </div>
+            <div></div>
           )}
         ></Route>
         <Route
@@ -41,7 +44,7 @@ const App: React.FC<AppProps> = props => {
         <Route
           exact
           path="/login"
-          render={() => <LoginForm isSignedIn={props.user.isSignedIn} />}
+          render={() => <LoginForm isSignedIn={props.user.isSignedIn} signIn={props.signIn} />}
         ></Route>
         <Route exact path="/users" component={Index} />
       </Switch>
@@ -54,7 +57,7 @@ const mapStateToProps = (state: AppState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  signIn: () => dispatch(signInAction()),
+  signIn: (data: SignInData) => dispatch(signInAction(data)),
   signOut: () => dispatch(signOutAction())
 });
 

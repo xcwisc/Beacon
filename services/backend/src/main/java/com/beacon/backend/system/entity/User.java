@@ -7,8 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -20,10 +21,13 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  @Size(max = 30)
   private String username;
   private String password;
+  private String email;
   private String roles;
+  @ManyToOne
+  @JoinColumn(name = "city_id")
+  private City city;
 
   public List<SimpleGrantedAuthority> getRoles() {
     List<SimpleGrantedAuthority> authorities = new ArrayList<>();
